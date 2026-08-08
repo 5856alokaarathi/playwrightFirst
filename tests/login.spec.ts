@@ -27,7 +27,7 @@ test("Verify that user cannot login to the page with correct username with incor
   await expect(page.locator('[data-test="error"]')).toBeVisible();
 })
 
-test.afterAll(async ({page}) => {
+test.afterEach(async ({page}) => {
     const loginPage = new LoginPage(page);
     await loginPage.closeBrowser();
 })
