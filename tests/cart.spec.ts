@@ -17,6 +17,8 @@ test("Verify that user can add a random item to the cart and verify the details"
   console.log(`Item added to cart: ${itemDetails.get('name')} - Price: ${itemDetails.get('price')}`);
   // Here you can add assertions to verify the item details in the cart
   // For example, you can navigate to the cart page and check if the item is present
+  await cartPage.verifyCartDetails();
+  
 })
 
 })

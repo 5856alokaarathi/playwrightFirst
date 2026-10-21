@@ -8,8 +8,12 @@ export class CartPage {
     private readonly itemName: Locator;
     private readonly itemPrice: Locator;
     private readonly itemCard: Locator;
-    private readonly cartMap:Map<string, string>[]=[];
+    private cartMap:Map<string, string>[]=[];
     private readonly cartButton:Locator
+    private readonly itemNameIntheCart:Locator;
+    private readonly itemPriceIntheCart:Locator;
+    private readonly cartPageTitle:Locator;
+
     
     
     constructor(page: Page) {
@@ -19,7 +23,10 @@ export class CartPage {
         this.itemName = this.page.locator('[data-test="inventory-item-name"]');
         this.itemPrice = this.page.locator('[data-test="inventory-item-price"]');
         this.itemCard = this.page.locator('[data-test="inventory-item"]');
-        this.cartButton = this.page.locator('[data-test="shopping-cart-link"');
+        this.cartButton = this.page.locator('[data-test="shopping-cart-link"]');
+        this.itemNameIntheCart = this.page.locator('[data-test="inventory-item-name"]');
+        this.itemPriceIntheCart = this.page.locator('[data-test="inventory-item-price"]');
+        this.cartPageTitle = this.page.locator('[data-test="title"]')
     }
 
     async clickOnRandomItem() {
@@ -39,7 +46,28 @@ export class CartPage {
     }
 
     async verifyCartDetails(){
+        await this.cartButton.click();
+        await expect(this.cartPageTitle).toBeVisible();
+        const  itemIntheCartName = await this.itemNameIntheCart.innerText();
+        const itemIntheCartPrice = await this.itemPriceIntheCart.innerText();
+        const firstItem = this.cartMap[0];
+        const itemNameInUi = firstItem?.get('name') ?? '';
+        const itemPriceInUi = firstItem?.get('price')?? '';
+        await expect(this.itemNameIntheCart).toContainText(itemNameInUi);
+        await expect(this.itemPriceIntheCart).toContainText(itemPriceInUi);
+    }
 
+    async convertPrice()
+    {
+        const firstItem = this.cartMap[0];
+        const itemPriceUi = firstItem?.get('price')?? '';
+        const cleanedPrice = itemPriceUi.replace(/[^0-9.]/g, "");
+        const priceNumber = parseFloat(cleanedPrice);
+    }
+
+    async clickCheckoutButton()
+    {
+        await this.checkoutButton.click();
     }
 
 
